@@ -1,8 +1,7 @@
-
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: project cicd flow
+name: Build JAR & Push to Maven
 
 on:
   push:
@@ -26,8 +25,8 @@ jobs:
     - name: Build with Maven
       run: mvn clean install
 
-    - name: Build & push Docker image
-      uses: mr-smithers-excellent/docker-build-push@v5
+    - name: Docker Build & Push Action
+      uses: mr-smithers-excellent/docker-build-push@v6.3
       with:
         image: padmanabhan1/githubaction
         tags: latest
