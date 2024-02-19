@@ -1,14 +1,9 @@
-
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: project cicd flow
+name: Java Maven Build and Docker Push
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+    branches:
+      - master
 
 jobs:
   build:
@@ -16,15 +11,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v2
       with:
-        java-version: '1.8'
-        distribution: 'adopt'
-        cache: maven
+        java-version: '17'
+
     - name: Build with Maven
-      run: mvn clean install
+      run: mvn clean package
 
     - name: Build & push Docker image
       uses: mr-smithers-excellent/docker-build-push@v5
@@ -35,4 +31,43 @@ jobs:
         dockerfile: Dockerfile
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
+
+
+
+# # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+
+# name: project cicd flow
+
+# on:
+#   push:
+#     branches: [ master ]
+#   pull_request:
+#     branches: [ master ]
+
+# jobs:
+#   build:
+
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Set up JDK 1.8
+#       uses: actions/setup-java@v1
+#       with:
+#         java-version: '1.8'
+#         distribution: 'adopt'
+#         cache: maven
+#     - name: Build with Maven
+#       run: mvn clean install
+
+#     - name: Build & push Docker image
+#       uses: mr-smithers-excellent/docker-build-push@v5
+#       with:
+#         image: padmanabhan1/githubaction
+#         tags: latest
+#         registry: docker.io
+#         dockerfile: Dockerfile
+#         username: ${{ secrets.DOCKER_USERNAME }}
+#         password: ${{ secrets.DOCKER_PASSWORD }}
 
