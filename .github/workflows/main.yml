@@ -1,19 +1,12 @@
 # This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
 # For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
 
-name: Build JAR & Push to Maven
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
+name: Build JAR 
+on: push
 jobs:
-  build:
-
+  build-project:
+    name: Build Project
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: Set up JDK 1.8
@@ -24,14 +17,8 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn clean install
-
-    - name: Docker Build & Push Action
-      uses: mr-smithers-excellent/docker-build-push@v6.3
+    - name: Upload static site
+      uses: actions/upload-artifact@v2
       with:
-        image: padmanabhan1/githubaction
-        tags: latest
-        registry: docker.io
-        dockerfile: Dockerfile
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+        path: .target/
 
