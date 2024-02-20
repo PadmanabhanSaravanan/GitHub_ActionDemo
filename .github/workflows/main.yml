@@ -7,9 +7,9 @@ jobs:
     needs: build-project
     steps:
     - name: Download web-app content
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
-        name: web-app
+        name: my-artifact
     - name: View content
       run: ls -R
     - name: Archive web-app content
